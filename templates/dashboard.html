@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2 class="page-title">🚀 TrustNet Dashboard</h2>
+
+<div class="row mt-4">
+  <div class="col-md-4">
+    <div class="card p-4 text-center">
+      <h6 class="muted-text">Total Analyses</h6>
+      <h2>{{ total|default:"0" }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-4 text-center">
+      <h6 class="muted-text">Trusted Results</h6>
+      <h2 class="risk-green">{{ safe|default:"0" }}</h2>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-4 text-center">
+      <h6 class="muted-text">Risky Results</h6>
+      <h2 class="risk-red">{{ risky|default:"0" }}</h2>
+    </div>
+  </div>
+</div>
+
+<div id="analysis-form" class="card p-4 mt-4">
+  <h3>🧪 New Risk Analysis</h3>
+  <p class="muted-text">
+    Analyze messages, emails, usernames, and social media links using
+    pattern-based risk scoring.
+  </p>
+
+  <form method="post" action="/analyze/">
+    {% csrf_token %}
+
+    <input
+      type="text"
+      name="username"
+      class="form-control mb-3"
+      placeholder="Username"
+    />
+    <input
+      type="email"
+      name="email"
+      class="form-control mb-3"
+      placeholder="Email"
+    />
+    <input
+      type="text"
+      name="url"
+      class="form-control mb-3"
+      placeholder="Social media link"
+    />
+    <textarea
+      name="text"
+      class="form-control mb-3"
+      placeholder="Message / Caption"
+    ></textarea>
+
+    <button class="btn primary-gradient px-4">Analyze Risk</button>
+  </form>
+</div>
+
+{% endblock %}

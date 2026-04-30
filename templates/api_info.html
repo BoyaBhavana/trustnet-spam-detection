@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block content %}
+<h2>🔌 API Information</h2>
+
+<div class="card p-4 mt-3">
+  <h4>TrustNet API Endpoint</h4>
+
+  <p class="muted-text">
+    Use this endpoint to check risk score using text input.
+  </p>
+
+  <code> http://127.0.0.1:8000/api/trust/?text=win free money </code>
+
+  <hr />
+
+  <h5>Example Response</h5>
+
+  <pre
+    style="
+      background: #020617;
+      color: #22c55e;
+      padding: 15px;
+      border-radius: 10px;
+    "
+  >
+{
+    "risk_score": 72.5,
+    "status": "Risky"
+}
+    </pre
+  >
+</div>
+{% endblock %}

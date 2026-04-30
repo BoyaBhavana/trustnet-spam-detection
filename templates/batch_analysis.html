@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2 class="page-title">🧩 Batch Analysis</h2>
+
+<div class="card p-4">
+  <p class="muted-text">
+    Analyze different inputs from different individuals separately.
+  </p>
+
+  <form method="post">
+    {% csrf_token %} {% for i in "1234" %}
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <select name="input{{ i }}_type" class="form-control">
+          <option value="message">Message</option>
+          <option value="username">Username</option>
+          <option value="email">Email</option>
+          <option value="url">Social Link</option>
+        </select>
+      </div>
+
+      <div class="col-md-9">
+        <input
+          type="text"
+          name="input{{ i }}_value"
+          class="form-control"
+          placeholder="Enter input {{ i }}"
+        />
+      </div>
+    </div>
+    {% endfor %}
+
+    <button class="btn primary-gradient">Analyze All</button>
+  </form>
+</div>
+
+{% if results %}
+<div class="card p-4 mt-4">
+  <h4>Batch Results</h4>
+
+  <table class="table table-dark table-striped mt-3">
+    <tr>
+      <th>Type</th>
+      <th>Input</th>
+      <th>Risk</th>
+      <th>Status</th>
+      <th>Reasons</th>
+    </tr>
+
+    {% for r in results %}
+    <tr>
+      <td>{{ r.type }}</td>
+      <td>{{ r.value|truncatechars:35 }}</td>
+      <td>
+        <span
+          class="{% if r.risk <= 30 %}risk-green{% elif r.risk <= 60 %}risk-yellow{% else %}risk-red{% endif %}"
+        >
+          {{ r.risk }}%
+        </span>
+      </td>
+      <td>{{ r.status }}</td>
+      <td>
+        {% if r.reasons %} {% for reason in r.reasons %} {{ reason }}<br />
+        {% endfor %} {% else %} No major risk detected {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %} {% endblock %}

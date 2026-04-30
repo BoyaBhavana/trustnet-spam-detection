@@ -1,0 +1,78 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2 class="page-title">🔍 Analysis Result</h2>
+
+<div class="card p-4">
+  <h5 class="muted-text">Risk Score</h5>
+
+  <h1
+    style="font-size: 65px; font-weight: 800"
+    class="{% if risk <= 30 %}risk-green{% elif risk <= 60 %}risk-yellow{% else %}risk-red{% endif %}"
+  >
+    {{ risk }}%
+  </h1>
+
+  <div class="progress mb-4" style="height: 18px">
+    <div
+      class="progress-bar {% if risk <= 30 %}bg-success {% elif risk <= 60 %}bg-warning {% else %}bg-danger {% endif %}"
+      style="width: {{ risk }}%"
+    ></div>
+  </div>
+
+  <h5>
+    Status:
+    <span
+      class="{% if status == 'Trusted' %}risk-green{% elif status == 'Suspicious' %}risk-yellow{% else %}risk-red{% endif %}"
+    >
+      {{ status }}
+    </span>
+  </h5>
+
+  <hr />
+
+  <h4>📊 Score Breakdown</h4>
+
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <div class="card p-3 text-center">
+        <h6 class="muted-text">Spam Score</h6>
+        <h3>{{ spam }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3 text-center">
+        <h6 class="muted-text">Fake User Score</h6>
+        <h3>{{ fake }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3 text-center">
+        <h6 class="muted-text">URL Risk Score</h6>
+        <h3>{{ url_risk }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <h4>❗ Why this score?</h4>
+
+  {% if reasons %}
+  <ul>
+    {% for r in reasons %}
+    <li>{{ r }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="risk-green">No major risks detected.</p>
+  {% endif %}
+
+  <div class="mt-4">
+    <a href="/" class="btn primary-gradient">Analyze Another</a>
+    <a href="/history/" class="btn btn-outline-info">View History</a>
+  </div>
+</div>
+
+{% endblock %}

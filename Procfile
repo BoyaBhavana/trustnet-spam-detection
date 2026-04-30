@@ -1,0 +1,1 @@
+web: gunicorn trustnet_project.wsgi

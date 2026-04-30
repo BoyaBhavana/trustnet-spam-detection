@@ -1,0 +1,74 @@
+<a href="/export/" class="btn btn-success mb-3">Download Report</a>
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<h2 class="mb-4">📊 Analysis History</h2>
+
+<!-- TABLE -->
+<div class="card bg-dark text-white mb-4 p-3">
+  <table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th>Text</th>
+        <th>Username</th>
+        <th>Risk</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% if data %} {% for item in data %}
+      <tr>
+        <td>{{ item.text|default:"-"|truncatechars:30 }}</td>
+        <td>{{ item.username|default:"-" }}</td>
+
+        <td>
+          <span
+            class="{% if item.risk_score <= 30 %} text-success {% elif item.risk_score <= 60 %} text-warning {% else %} text-danger {% endif %}"
+          >
+            {{ item.risk_score }}%
+          </span>
+        </td>
+
+        <td>{{ item.status }}</td>
+        <td>{{ item.created_at }}</td>
+      </tr>
+      {% endfor %} {% else %}
+      <tr>
+        <td colspan="5" class="text-center">No data available</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<!-- CHART -->
+<div class="card bg-dark text-white p-3">
+  <h4>📈 Recent Risk Trend</h4>
+  <canvas id="chart"></canvas>
+</div>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const labels = {{ labels|default:"[]"|safe }};
+  const scores = {{ scores|default:"[]"|safe }};
+
+  const data = {
+      labels: labels,
+      datasets: [{
+          label: 'Risk Score',
+          data: scores,
+          borderWidth: 2,
+          tension: 0.3
+      }]
+  };
+
+  new Chart(document.getElementById('chart'), {
+      type: 'line',
+      data: data,
+  });
+</script>
+
+{% endblock %}
